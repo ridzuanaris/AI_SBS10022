@@ -40,7 +40,9 @@ st.set_page_config(
 st.title("📘 Pensyarah AI SBS10022")
 st.caption("Sains | Kolej Komuniti")
 
-# Butang clear chat
+# =========================
+# CLEAR CHAT
+# =========================
 
 if st.button("🗑️ Clear Chat"):
     st.session_state.messages = []
@@ -52,8 +54,6 @@ if st.button("🗑️ Clear Chat"):
 
 if "messages" not in st.session_state:
     st.session_state.messages = []
-
-# Papar sejarah chat
 
 for message in st.session_state.messages:
 
@@ -84,13 +84,16 @@ if prompt_user := st.chat_input("Tanya soalan anda..."):
 
     docs = db.similarity_search(
         prompt_user,
-        k=3
+        k=1
     )
 
     context = ""
 
     for doc in docs:
         context += doc.page_content + "\n\n"
+
+    # Hadkan context supaya jimat token
+    context = context[:1500]
 
     # =========================
     # PROMPT
@@ -135,20 +138,19 @@ nyatakan bahawa jawapan berikut adalah daripada pengetahuan umum AI.
     # GEMINI RESPONSE
     # =========================
 
-  with st.chat_message("assistant"):
+    with st.chat_message("assistant"):
 
-    with st.spinner("Sedang mencari jawapan..."):
+        with st.spinner("Sedang mencari jawapan..."):
 
-        try:
-            response = model.generate_content(prompt)
+            try:
 
-            jawapan = response.text
+                response = model.generate_content(prompt)
 
-            st.markdown(jawapan)
+                jawapan = response.text
 
-        except Exception:
+            except Exception:
 
-            jawapan = """
+                jawapan = """
 ⚠️ Sistem AI sedang sibuk atau had penggunaan telah dicapai.
 
 Sila cuba semula dalam beberapa minit.
