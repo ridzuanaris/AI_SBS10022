@@ -135,13 +135,24 @@ nyatakan bahawa jawapan berikut adalah daripada pengetahuan umum AI.
     # GEMINI RESPONSE
     # =========================
 
-    with st.chat_message("assistant"):
+  with st.chat_message("assistant"):
 
-        with st.spinner("Sedang mencari jawapan..."):
+    with st.spinner("Sedang mencari jawapan..."):
 
+        try:
             response = model.generate_content(prompt)
 
             jawapan = response.text
+
+            st.markdown(jawapan)
+
+        except Exception:
+
+            jawapan = """
+⚠️ Sistem AI sedang sibuk atau had penggunaan telah dicapai.
+
+Sila cuba semula dalam beberapa minit.
+"""
 
             st.markdown(jawapan)
 
